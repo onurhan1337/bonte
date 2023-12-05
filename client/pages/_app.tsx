@@ -1,9 +1,9 @@
-import 'tailwindcss/tailwind.css'
+import "tailwindcss/tailwind.css";
 
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import Header from '../components/header'
-import { Auth0Provider } from '@auth0/auth0-react'
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import Header from "../components/header";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -17,7 +17,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           name="description"
           content="Clone and deploy your own Next.js portfolio in minutes."
         />
-        <title>My awesome blog</title>
+        <title>Anasayfa - Bonte</title>
       </Head>
 
       <Header />
@@ -26,5 +26,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </main>
     </Auth0Provider>
-  )
+  );
 }
