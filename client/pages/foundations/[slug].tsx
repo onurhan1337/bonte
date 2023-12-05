@@ -1,6 +1,5 @@
 import Head from "next/head";
 import type { InferGetStaticPropsType } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 
@@ -33,7 +32,7 @@ export default function FoundationPage({
         <div>
           <article>
             <header>
-              <Image
+              <img
                 src={foundation.image}
                 alt="Foundation"
                 width={800}

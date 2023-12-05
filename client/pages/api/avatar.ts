@@ -6,9 +6,19 @@ export default async function handler(
 ) {
   const url = req.query.url as string;
 
-  const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      res.status(response.status).send(response.statusText);
+      return;
+    }
 
-  res.setHeader("Content-Type", response.headers.get("content-type") || "");
-  res.send(Buffer.from(buffer));
+    const buffer = await response.arrayBuffer();
+
+    res.setHeader("Content-Type", response.headers.get("content-type") || "");
+    res.send(Buffer.from(buffer));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
 }

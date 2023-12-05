@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -10,7 +9,7 @@ const FoundationCard = ({ foundation }: { foundation: Foundation }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <div>
-        <Image
+        <img
           src={foundation.image}
           alt="Foundation"
           width={400}

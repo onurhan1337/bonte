@@ -5,7 +5,6 @@ import { Menu, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
 import Container from "../components/container";
-import Image from "next/image";
 
 export default function Header() {
   const { isAuthenticated, loginWithRedirect, user } = useAuth0();
@@ -53,7 +52,7 @@ const UserDropdown = ({ avatar }: { avatar: string }) => {
     <Menu as="div" className="relative">
       <div>
         <Menu.Button className="py-1.5">
-          <Image
+          <img
             src={`/api/avatar?url=${avatar}`}
             width={40}
             height={40}
