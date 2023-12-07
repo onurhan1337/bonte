@@ -1,9 +1,11 @@
 import "../styles/globals.css";
 
-import type { AppProps } from "next/app";
 import Head from "next/head";
-import Header from "../components/header";
+import type { AppProps } from "next/app";
 import { Auth0Provider } from "@auth0/auth0-react";
+
+import Header from "../components/header";
+import { Toaster } from "../components/ui/toaster";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -24,6 +26,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
       <main className="py-14">
         <Component {...pageProps} />
+        <Toaster />
       </main>
     </Auth0Provider>
   );

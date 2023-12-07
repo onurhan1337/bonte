@@ -1,9 +1,9 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "../ui/button";
-
 import {
   Form,
   FormControl,
@@ -11,7 +11,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "../ui/form";
 import { FOUNDATIONS } from "../../interfaces";
 import { Input } from "../ui/input";
@@ -24,7 +23,8 @@ import {
 } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
 import { Textarea } from "../ui/textarea";
-import { cn } from "../../lib/utils";
+import { cn, getUserId } from "../../lib/utils";
+import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
   name: z.string({}).min(3).max(50, {
@@ -46,6 +46,9 @@ const formSchema = z.object({
 });
 
 const DonationForm = () => {
+  const { user } = useAuth0();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,9 +61,48 @@ const DonationForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: Send form data to server and search for a way to amount
-    alert(JSON.stringify(values, null, 2));
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const userId = getUserId(user.sub);
+
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    try {
+      const response = await fetch("http://localhost:3001/donation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userId}`,
+        },
+        body: JSON.stringify({
+          ...values,
+          createdAt: createdAt.toISOString(),
+          updatedAt: updatedAt.toISOString(),
+          userId,
+        }),
+      });
+
+      if (!response.ok) {
+        // TODO: Add here a toast notification to show the error
+        toast({
+          title: "Hata",
+          description: "Bir hata oluştu. Lütfen tekrar deneyin.",
+          variant: "destructive",
+        });
+      }
+
+      const data = await response.json();
+      toast({
+        title: "Başarılı",
+        description: "Bağışınız başarıyla alındı",
+      });
+      return data;
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Bir hata oluştu. Lütfen tekrar deneyin.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
