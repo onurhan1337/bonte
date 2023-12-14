@@ -22,7 +22,7 @@ import {
 } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
 import { Textarea } from "../ui/textarea";
-import { cn, getUserId } from "../../lib/utils";
+import { cn } from "../../lib/utils";
 import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
@@ -199,10 +199,10 @@ const DonationForm = () => {
                   <p
                     className={cn(
                       "text-sm text-zinc-600 font-light text-right",
-                      field.value.length > 250 && "text-red-600"
+                      (field.value ?? "").length > 250 && "text-red-600"
                     )}
                   >
-                    {field.value.length} / 250 karakter kullanıldı
+                    {(field.value ?? "").length} / 250 karakter kullanıldı
                   </p>
                 </>
               </FormControl>
