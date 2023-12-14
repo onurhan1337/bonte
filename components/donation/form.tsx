@@ -24,6 +24,8 @@ import { Checkbox } from "../ui/checkbox";
 import { Textarea } from "../ui/textarea";
 import { cn } from "../../lib/utils";
 import { useToast } from "../ui/use-toast";
+import { donateFormState } from "@/lib/store";
+import { LoadingDots } from "../shared/icons";
 
 const formSchema = z.object({
   name: z.string({}).min(3).max(50, {
@@ -52,6 +54,7 @@ const formSchema = z.object({
 
 const DonationForm = () => {
   const { toast } = useToast();
+  const { setOpen } = donateFormState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,24 +69,16 @@ const DonationForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    const createdAt = new Date();
-    const updatedAt = new Date();
     try {
       const response = await fetch("api/donation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...values,
-          createdAt: createdAt.toISOString(),
-          updatedAt: updatedAt.toISOString(),
-        }),
+        body: JSON.stringify(values),
       });
 
       if (!response.ok) {
-        // TODO: Add here a toast notification to show the error
         toast({
           title: "Hata",
           description: "Bir hata oluştu. Lütfen tekrar deneyin.",
@@ -103,90 +98,101 @@ const DonationForm = () => {
         description: "Bir hata oluştu. Lütfen tekrar deneyin.",
         variant: "destructive",
       });
+    } finally {
+      setOpen(false);
     }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Adınız</FormLabel>
-              <FormControl>
-                <Input placeholder="Adınız" {...field} />
-              </FormControl>
-              <FormDescription>
-                {form.formState.errors.name?.message}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>E-posta Adresiniz</FormLabel>
-              <FormControl>
-                <Input placeholder="E-posta Adresiniz" {...field} />
-              </FormControl>
-              <FormDescription>
-                {form.formState.errors.email?.message}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Bağış Tutarı(&#x20BA;)</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  value={field.value}
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                  min={0.0}
-                  step={0.01}
-                  max={100000.0}
-                />
-              </FormControl>
-              <FormDescription>
-                {form.formState.errors.amount?.message}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="foundation"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Kurum</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <div className="flex flex-row justify-between gap-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel htmlFor={field.name}>Adınız</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kurum" />
-                  </SelectTrigger>
+                  <Input placeholder="Adınız" {...field} />
                 </FormControl>
-                <SelectContent>
-                  {Object.values(FOUNDATIONS).map((foundation) => (
-                    <SelectItem key={foundation} value={foundation}>
-                      {foundation}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                {form.formState.errors.foundation?.message}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
+                <FormDescription>
+                  {form.formState.errors.name?.message}
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel htmlFor={field.name}>E-posta Adresiniz</FormLabel>
+                <FormControl>
+                  <Input placeholder="E-posta Adresiniz" {...field} />
+                </FormControl>
+                <FormDescription>
+                  {form.formState.errors.email?.message}
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex flex-row justify-between gap-4">
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel htmlFor={field.name}>
+                  Bağış Tutarı(&#x20BA;)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    value={field.value}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    min={0.0}
+                    step={0.01}
+                    max={100000.0}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {form.formState.errors.amount?.message}
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="foundation"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel htmlFor={field.name}>Kurum</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Kurum" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.values(FOUNDATIONS).map((foundation) => (
+                      <SelectItem key={foundation} value={foundation}>
+                        {foundation}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  {form.formState.errors.foundation?.message}
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="message"
@@ -229,8 +235,12 @@ const DonationForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full bg-blue-600 hover:bg-blue-700" type="submit">
-          Gönder
+        <Button
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+          disabled={form.formState.isSubmitting}
+          type="submit"
+        >
+          {form.formState.isSubmitting ? <LoadingDots /> : "Gönder"}
         </Button>
       </form>
     </Form>

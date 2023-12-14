@@ -25,7 +25,7 @@ export default function App({
 
       <Header />
 
-      <main className="py-14">
+      <main className="mx-5 py-32">
         <Component {...pageProps} />
         <Toaster />
       </main>

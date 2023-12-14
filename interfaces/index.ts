@@ -15,12 +15,18 @@ export type Comment = {
 
 export type Donation = {
   id: string;
-  created_at: number;
+  name: string;
+  email: string;
   amount: number;
-  is_anonymous: boolean;
+  isAnonymous: boolean;
+  foundation: FOUNDATIONS;
   message?: string;
-  foundation: Foundation;
-  user: User;
+  created_at?: number;
+  user?: {
+    id?: string;
+    name?: string;
+    email?: string;
+  };
 };
 
 export type Foundation = {

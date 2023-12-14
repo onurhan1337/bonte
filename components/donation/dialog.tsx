@@ -7,10 +7,16 @@ import {
 } from "../ui/dialog";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import DonationForm from "./form";
+import { donateFormState } from "@/lib/store";
 
 const DonationFormDialog = () => {
+  const { isOpen, setOpen } = donateFormState();
+
   return (
-    <Dialog>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => setOpen(open)}
+    >
       <DialogTrigger asChild>
         <button
           type="button"
@@ -23,9 +29,11 @@ const DonationFormDialog = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Bağış Yap</DialogTitle>
-          <DialogContent>
-            <p>Aşağıdaki formu doldurarak bağışta bulunabilirsiniz.</p>
-          </DialogContent>
+          <div>
+            <p
+              className="text-sm text-zinc-600 font-normal"
+            >Aşağıdaki formu doldurarak bağışta bulunabilirsiniz.</p>
+          </div>
         </DialogHeader>
         <DonationForm />
       </DialogContent>
