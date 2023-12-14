@@ -1,12 +1,29 @@
-export default async function getUser(token: string) {
-  const response = await fetch(
-    `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/userinfo`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  )
-  return await response.json()
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "./prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../pages/api/auth/[...nextauth]";
+
+export default async function getUser(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session || !session.user) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email!,
+    },
+  });
+
+  if (!user) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  return user;
 }

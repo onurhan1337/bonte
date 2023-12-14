@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -33,9 +32,15 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Geçerli bir e-posta adresi girmelisiniz",
   }),
-  amount: z.number().min(1, {
-    message: "Ücret en az 1 TL olmalıdır",
-  }),
+  amount: z
+    .number()
+    .min(1, {
+      message: "Ücret en az 1 TL olmalıdır",
+    })
+    .max(100000, {
+      message: "Ücret en fazla 100.000 TL olmalıdır",
+    }),
+
   isAnonymous: z.boolean().default(false).optional(),
   foundation: z
     .nativeEnum(FOUNDATIONS, {
@@ -46,7 +51,6 @@ const formSchema = z.object({
 });
 
 const DonationForm = () => {
-  const { user } = useAuth0();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -62,22 +66,19 @@ const DonationForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const userId = getUserId(user.sub);
 
     const createdAt = new Date();
     const updatedAt = new Date();
     try {
-      const response = await fetch("http://localhost:3001/donation", {
+      const response = await fetch("api/donation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userId}`,
         },
         body: JSON.stringify({
           ...values,
           createdAt: createdAt.toISOString(),
           updatedAt: updatedAt.toISOString(),
-          userId,
         }),
       });
 
@@ -143,14 +144,15 @@ const DonationForm = () => {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor={field.name}>Bağış Tutarı</FormLabel>
+              <FormLabel htmlFor={field.name}>Bağış Tutarı(&#x20BA;)</FormLabel>
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="Bağış Tutarı"
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                  min={1}
+                  min={0.0}
+                  step={0.01}
+                  max={100000.0}
                 />
               </FormControl>
               <FormDescription>

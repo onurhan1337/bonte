@@ -1,18 +1,19 @@
 import "../styles/globals.css";
 
 import Head from "next/head";
+import type { Session } from "next-auth";
 import type { AppProps } from "next/app";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { SessionProvider } from "next-auth/react";
 
 import Header from "../components/header";
 import { Toaster } from "../components/ui/toaster";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps<{ session: Session }>) {
   return (
-    <Auth0Provider
-      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
-      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
-    >
+    <SessionProvider session={session}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
@@ -28,6 +29,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
         <Toaster />
       </main>
-    </Auth0Provider>
+    </SessionProvider>
   );
 }

@@ -1,14 +1,16 @@
 import { Fragment } from "react";
 import Link from "next/link";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useRouter } from "next/router";
+import { useSession, signOut } from "next-auth/react";
 import { Menu, Transition } from "@headlessui/react";
-import { PlusIcon } from "@heroicons/react/24/outline";
 
 import Container from "../components/container";
 import DonationFormDialog from "./donation/dialog";
+import { useSignInModal } from "./layout/sign-in-modal";
 
 export default function Header() {
-  const { isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const { data: session, status } = useSession();
+  const { SignInModal, setShowSignInModal } = useSignInModal();
 
   return (
     <header className="py-6">
@@ -18,37 +20,38 @@ export default function Header() {
             <Link href="/">Anasayfa</Link>
             <Link href="/foundations">Kurumlar</Link>
           </div>
-          {isAuthenticated ? (
+          {status === 'authenticated' ? (
             <div className="flex items-center space-x-4">
               <DonationFormDialog />
-              <UserDropdown avatar={user.picture} />
+              <UserDropdown avatar={session.user.image} />
             </div>
           ) : (
             <button
               type="button"
               className="py-2 px-4 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700"
               onClick={() =>
-                loginWithRedirect({ redirectUri: window.location.origin })
+                setShowSignInModal((showSignInModal) => !showSignInModal)
               }
             >
-              Log In
+              Giriş Yap
             </button>
           )}
         </nav>
       </Container>
+      <SignInModal />     
     </header>
   );
 }
 
 const UserDropdown = ({ avatar }: { avatar: string }) => {
-  const { logout } = useAuth0();
+  const router = useRouter();
 
   return (
     <Menu as="div" className="relative">
       <div>
         <Menu.Button className="py-1.5">
           <img
-            src={`/api/avatar?url=${avatar}`}
+            src={avatar}
             width={40}
             height={40}
             className="rounded-full"
@@ -74,6 +77,7 @@ const UserDropdown = ({ avatar }: { avatar: string }) => {
                   className={`${
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                   } block px-4 py-2 text-sm w-full text-left`}
+                  onClick={() => router.push("/donations")}
                 >
                   Bağışlarım
                 </button>
@@ -93,7 +97,7 @@ const UserDropdown = ({ avatar }: { avatar: string }) => {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => logout({ returnTo: window.location.origin })}
+                  onClick={() => signOut()}
                   className={`${
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                   } block px-4 py-2 text-sm w-full text-left`}

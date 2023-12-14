@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+ 
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  // Define a relationship with the User model
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Use unique constraints for account identification
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Use an index for faster lookups by userId
+  @@index([userId])
+}
+
+model User {
+  id            String    @id @default(cuid()) @unique
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  // Define relationships for User's accounts, sessions, and projects
+  accounts      Account[]
+  sessions      Session[]
+  donations      Donation[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  // Use unique constraints for verification tokens
+  @@unique([identifier, token])
+}   
+model Donation {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  amount      Float
+  isAnonymous Boolean
+  foundation  String
+  message     String? 
+  userId      String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at") 
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

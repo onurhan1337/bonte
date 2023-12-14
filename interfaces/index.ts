@@ -13,6 +13,16 @@ export type Comment = {
   user: User;
 };
 
+export type Donation = {
+  id: string;
+  created_at: number;
+  amount: number;
+  is_anonymous: boolean;
+  message?: string;
+  foundation: Foundation;
+  user: User;
+};
+
 export type Foundation = {
   slug?: string;
   title?: string;
