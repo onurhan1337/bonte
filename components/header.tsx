@@ -23,7 +23,7 @@ export default function Header() {
           {status === 'authenticated' ? (
             <div className="flex items-center space-x-4">
               <DonationFormDialog />
-              <UserDropdown avatar={session.user.image} />
+              <UserDropdown avatar={session?.user?.image} />
             </div>
           ) : (
             <button
@@ -43,7 +43,7 @@ export default function Header() {
   );
 }
 
-const UserDropdown = ({ avatar }: { avatar: string }) => {
+const UserDropdown = ({ avatar }: { avatar: string | null | undefined }) => {
   const router = useRouter();
 
   return (
@@ -51,7 +51,9 @@ const UserDropdown = ({ avatar }: { avatar: string }) => {
       <div>
         <Menu.Button className="py-1.5">
           <img
-            src={avatar}
+            src={
+              avatar || "https://i.pravatar.cc/300"
+            }
             width={40}
             height={40}
             className="rounded-full"
