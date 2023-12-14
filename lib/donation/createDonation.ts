@@ -3,19 +3,11 @@ import * as z from "zod";
 
 import prisma from "../prisma";
 import { Donation, FOUNDATIONS } from "../../interfaces";
-import { getSession } from "@auth0/nextjs-auth0";
 
 export default async function createDonation(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getSession(req, res);
-
-  if (!session) {
-    return res.status(401).json({
-      message: "Unauthorized",
-    });
-  }
 
   try {
     const schema = z.object({
@@ -58,23 +50,23 @@ export default async function createDonation(
       createdAt,
     } = parsedData;
 
-    const donation = await prisma.donation.create({
-      data: {
-        name,
-        email,
-        amount,
-        isAnonymous,
-        foundation,
-        message,
-        userId: session.idToken,
-        createdAt,
-        updatedAt,
-      },
-    });
+    // const donation = await prisma.donation.create({
+    //   data: {
+    //     name,
+    //     email,
+    //     amount,
+    //     isAnonymous,
+    //     foundation,
+    //     message,
+    //     userId: session.idToken,
+    //     createdAt,
+    //     updatedAt,
+    //   },
+    // });
 
-    return res.status(201).json({
-      donation,
-    });
+    // return res.status(201).json({
+    //   donation,
+    // });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
