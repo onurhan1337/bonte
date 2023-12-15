@@ -1,8 +1,8 @@
 export type User = {
-  name: string;
-  picture: string;
-  sub: string;
+  id: string;
+  name?: string;
   email?: string;
+  image?: string;
 };
 
 export type Comment = {
