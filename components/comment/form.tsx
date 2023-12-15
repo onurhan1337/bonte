@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 
-
 type CommentFormProps = {
   text: string;
   setText: Function;
@@ -32,7 +31,7 @@ export default function CommentForm({
       <div className="flex items-center mt-4">
         {session && (
           <button className="py-2 px-4 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700">
-            Send
+            Gönder
           </button>
         )}
       </div>
