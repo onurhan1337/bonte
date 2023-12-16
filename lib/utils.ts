@@ -25,3 +25,9 @@ export async function fetcher<T = any>(
 }
 
 export default fetcher;
+
+export const valueFormatter = (number: number) =>
+  isNaN(number) ? "0" : `₺ ${new Intl.NumberFormat("tr").format(number)}`;
+
+export const sliceText = (text: string, length: number) =>
+  text.length > length ? `${text.slice(0, length)}...` : text;
