@@ -10,6 +10,7 @@ export type Comment = {
   created_at: number;
   url: string;
   text: string;
+  rating: number;
   user: User;
 };
 

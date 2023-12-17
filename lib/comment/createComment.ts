@@ -11,14 +11,14 @@ export default async function createComments(
   res: NextApiResponse
 ) {
   const url = clearUrl(req.headers.referer as string);
-  const { text } = req.body;
+  const { text, rating } = req.body;
   const user = await getUser(req, res);
 
   if (!user) {
     return res.status(401).json({ message: "Unauthorized." });
   }
 
-  if (!text) {
+  if (!text || !rating) {
     return res.status(400).json({ message: "Missing parameter." });
   }
 
@@ -34,6 +34,7 @@ export default async function createComments(
       created_at: Date.now(),
       url,
       text,
+      rating,
       user: {
         id,
         name: name ?? undefined,
