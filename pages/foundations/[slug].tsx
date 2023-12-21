@@ -23,7 +23,7 @@ export default function FoundationPage({
   return (
     <Container>
       <Head>
-        <title>{`${foundation.title} | My awesome blog`}</title>
+        <title>{`${foundation.title} | Bonte`}</title>
       </Head>
 
       {router.isFallback ? (
@@ -31,14 +31,16 @@ export default function FoundationPage({
       ) : (
         <div>
           <article>
-            <header>
+            <div className="grid place-items-center">
               <img
                 src={foundation.image}
                 alt="Foundation"
-                width={800}
+                width={400}
                 height={400}
               />
-              <h1 className="text-4xl font-bold">{foundation.title}</h1>
+            </div>
+            <header>
+              <h1 className="text-3xl font-bold my-6">{foundation.title}</h1>
               <p className="mt-2 text-justify text-xl">{foundation.excerpt}</p>
             </header>
             <div

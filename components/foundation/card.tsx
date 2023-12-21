@@ -7,17 +7,15 @@ const FoundationCard = ({ foundation }: { foundation: Foundation }) => {
   const router = useRouter();
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <div>
+    <div className="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden min-h-full">
+      <div className="grid place-items-center border-b max-h-28">
         <img
           src={foundation.image}
           alt="Foundation"
-          width={400}
-          height={400}
-          className="object-fill p-3"
+          className="object-contain py-2 w-full max-h-24"
         />
       </div>
-      <div className="p-4 border-t">
+      <div className="p-4">
         <Link
           as={`/foundations/${foundation.slug}`}
           href="/foundations/[slug]"
@@ -25,7 +23,11 @@ const FoundationCard = ({ foundation }: { foundation: Foundation }) => {
         >
           {foundation.title}
         </Link>
-        <p className="text-gray-700 text-left">{foundation.excerpt}</p>
+        <p className="text-gray-700 text-left py-2 text-sm">
+          {foundation.excerpt}
+        </p>
+      </div>
+      <div className="p-4">
         <button
           type="button"
           onClick={() => router.push(`/foundations/${foundation.slug}`)}

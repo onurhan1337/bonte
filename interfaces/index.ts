@@ -51,5 +51,5 @@ export enum FOUNDATIONS {
   TurkiyeVeremSavasDernegi = "Türkiye Verem Savaş Derneği",
   TurkiyeKorunmayaMuhtacCocuklarVakfi = "Türkiye Korunmaya Muhtaç Çocuklar Vakfı",
   TurkiyeMilliKulturVakfi = "Türkiye Milli Kültür Vakfı",
-  TurkiyeSporTotoVakfi = "Türkiye Spor Toto Vakfı",
+  engelsizYasamVakfi = "Engelsiz Yaşam Vakfı",
 }
