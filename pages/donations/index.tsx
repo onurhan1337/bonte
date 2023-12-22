@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import Head from "next/head";
 import { useSession } from "next-auth/react";
 
 import fetcher from "../../lib/utils";
@@ -65,17 +66,26 @@ export default function DonationsIndex() {
     const foundationAmountPairs = Object.entries(groupedDonations);
 
     return (
-      <Container>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 py-6">
-          <div className="col-span-1">
-            <DonationsDonutChart data={data} />
+      <>
+        <Head>
+          <title>Bağışlarım | Bonte</title>
+          <meta
+            name="description"
+            content="View your donations and the top donations"
+          />
+        </Head>
+        <Container>
+          <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 py-6">
+            <div className="col-span-1">
+              <DonationsDonutChart data={data} />
+            </div>
+            <div className="col-span-1 sm:col-span-2">
+              <TopDonationsList foundationAmountPairs={foundationAmountPairs} />
+            </div>
           </div>
-          <div className="col-span-1 sm:col-span-2">
-            <TopDonationsList foundationAmountPairs={foundationAmountPairs} />
-          </div>
-        </div>
-        <DonationTable donations={data.donations} />
-      </Container>
+          <DonationTable donations={data.donations} />
+        </Container>
+      </>
     );
   } else {
     return (
