@@ -1,5 +1,5 @@
 import DonationFormDialog from "../components/donation/dialog";
-import Container from "../components/container";
+import Container from "../components/shared/container";
 import Globe from "@/components/shared/globe";
 import FaqSection from "@/components/layout/faq";
 import StatsSection from "@/components/layout/stats";

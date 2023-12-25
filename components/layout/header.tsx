@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 import { Menu, Transition } from "@headlessui/react";
 
-import Container from "../components/container";
-import DonationFormDialog from "./donation/dialog";
-import { useSignInModal } from "./layout/sign-in-modal";
+import Container from "../shared/container";
+import DonationFormDialog from "../donation/dialog";
+import { useSignInModal } from "./sign-in-modal";
 
 export default function Header() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { SignInModal, setShowSignInModal } = useSignInModal();
 
   return (
@@ -20,7 +20,7 @@ export default function Header() {
             <Link href="/">Anasayfa</Link>
             <Link href="/foundations">Kurumlar</Link>
           </div>
-          {status === 'authenticated' ? (
+          {session ? (
             <div className="flex items-center space-x-4">
               <DonationFormDialog />
               <UserDropdown avatar={session?.user?.image} />
@@ -38,7 +38,7 @@ export default function Header() {
           )}
         </nav>
       </Container>
-      <SignInModal />     
+      <SignInModal />
     </header>
   );
 }
@@ -51,9 +51,7 @@ const UserDropdown = ({ avatar }: { avatar: string | null | undefined }) => {
       <div>
         <Menu.Button className="py-1.5">
           <img
-            src={
-              avatar || "https://i.pravatar.cc/300"
-            }
+            src={avatar || "https://i.pravatar.cc/300"}
             width={40}
             height={40}
             className="rounded-full"
@@ -91,6 +89,7 @@ const UserDropdown = ({ avatar }: { avatar: string | null | undefined }) => {
                   className={`${
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                   } block px-4 py-2 text-sm w-full text-left`}
+                  onClick={() => router.push("/settings")}
                 >
                   Ayarlar
                 </button>

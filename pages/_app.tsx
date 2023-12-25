@@ -5,7 +5,7 @@ import type { Session } from "next-auth";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 
-import Header from "../components/header";
+import Header from "../components/layout/header";
 import { Toaster } from "../components/ui/toaster";
 
 export default function App({

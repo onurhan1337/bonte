@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 
 import fetcher from "../../lib/utils";
 import { Donation } from "interfaces";
-import Container from "@/components/container";
+import Container from "@/components/shared/container";
 import DonationTable from "@/components/donation/table";
 import { LoadingDots } from "@/components/shared/icons";
 import TopDonationsList from "@/components/donation/top-donations-list";

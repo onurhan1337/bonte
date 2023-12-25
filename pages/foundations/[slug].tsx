@@ -8,7 +8,7 @@ import {
   getFoundationBySlug,
 } from "../../lib/getFoundation";
 import Comment from "../../components/comment";
-import Container from "../../components/container";
+import Container from "../../components/shared/container";
 import markdownToHtml from "../../lib/markdownToHtml";
 
 export default function FoundationPage({

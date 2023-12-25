@@ -1,7 +1,7 @@
 import type { InferGetStaticPropsType } from "next";
 import Head from "next/head";
 
-import Container from "../../components/container";
+import Container from "../../components/shared/container";
 import FoundationCard from "../../components/foundation/card";
 import { getAllFoundations } from "../../lib/getFoundation";
 
