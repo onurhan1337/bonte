@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import updateUser from "@/lib/user/updateUser";
 import deleteUser from "@/lib/user/deleteUser";
 
 export default async function handler(
@@ -7,6 +8,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   switch (req.method) {
+    case "PATCH":
+      return updateUser(req, res);
     case "DELETE":
       return deleteUser(req, res);
     default:

@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LoadingSpinner from "../shared/icons/loading-spinner";
 import { LoadingDots } from "../shared/icons";
+import { toast } from "../ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -27,13 +27,31 @@ const SettingsForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(data);
-        resolve(null);
-      }, 3000);
-    });
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      const res = await fetch("/api/user", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update the user");
+      }
+
+      toast({
+        title: "Başarılı",
+        description: "Kullanıcı bilgileriniz başarıyla güncellendi.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Hata",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
