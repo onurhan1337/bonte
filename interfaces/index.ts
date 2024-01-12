@@ -31,12 +31,12 @@ export type Donation = {
 };
 
 export type Foundation = {
-  slug?: string;
-  title?: string;
-  content?: string;
-  image?: string;
-  excerpt?: string;
-  [key: string]: any;
+  id: number;
+  name: string;
+  excerpt: string;
+  description: string;
+  image: string;
+  slug: string;
 };
 
 export enum FOUNDATIONS {

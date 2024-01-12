@@ -73,3 +73,12 @@ model Donation {
   createdAt   DateTime? @default(now())
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model foundation {
+  id          String      @id @default(cuid()) @unique
+  name        String
+  excerpt     String
+  description String
+  image       String
+  createdAt   DateTime? @default(now())
+}

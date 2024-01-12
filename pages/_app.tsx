@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "react-quill/dist/quill.snow.css";
 
 import Head from "next/head";
 import type { Session } from "next-auth";

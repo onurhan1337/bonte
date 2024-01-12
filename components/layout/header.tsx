@@ -19,6 +19,9 @@ export default function Header() {
           <div className="space-x-4">
             <Link href="/">Anasayfa</Link>
             <Link href="/foundations">Kurumlar</Link>
+            {session?.user?.email == "onurhandtr@gmail.com" && (
+              <Link href="/admin">Admin</Link>
+            )}
           </div>
           {session ? (
             <div className="flex items-center space-x-4">

@@ -1,13 +1,28 @@
-import type { InferGetStaticPropsType } from "next";
 import Head from "next/head";
+import useSWR from "swr";
 
 import Container from "../../components/shared/container";
+import { fetcher } from "@/lib/utils";
 import FoundationCard from "../../components/foundation/card";
-import { getAllFoundations } from "../../lib/getFoundation";
 
-export default function NotePage({
-  allFoundations,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+type Foundation = {
+  id: number;
+  name: string;
+  excerpt: string;
+  description: string;
+  image: string;
+  slug: string;
+};
+
+export default function NotePage() {
+  const { data: allFoundations, error } = useSWR<Foundation[]>(
+    "/api/foundation",
+    fetcher
+  );
+
+  if (error) return <div>Failed to load</div>;
+  if (!allFoundations) return <div>Loading...</div>;
+
   return (
     <>
       <Head>
@@ -29,18 +44,4 @@ export default function NotePage({
       </Container>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const allFoundations = getAllFoundations([
-    "slug",
-    "title",
-    "image",
-    "excerpt",
-    "date",
-  ]);
-
-  return {
-    props: { allFoundations },
-  };
 }

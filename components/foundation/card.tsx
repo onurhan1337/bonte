@@ -17,11 +17,11 @@ const FoundationCard = ({ foundation }: { foundation: Foundation }) => {
       </div>
       <div className="p-4">
         <Link
-          as={`/foundations/${foundation.slug}`}
+          as={`/foundations/${foundation.id}`}
           href="/foundations/[slug]"
           className="text-lg leading-6 font-bold"
         >
-          {foundation.title}
+          {foundation.name}
         </Link>
         <p className="text-gray-700 text-left py-2 text-sm">
           {foundation.excerpt}
@@ -30,7 +30,7 @@ const FoundationCard = ({ foundation }: { foundation: Foundation }) => {
       <div className="p-4">
         <button
           type="button"
-          onClick={() => router.push(`/foundations/${foundation.slug}`)}
+          onClick={() => router.push(`/foundations/${foundation.id}`)}
           className="w-full mt-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-1 px-3.5 rounded"
         >
           İncele
